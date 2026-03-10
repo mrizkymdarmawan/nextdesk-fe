@@ -1,13 +1,18 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { User } from '@/types/auth'
+import type { PlatformUser, TenantUser, Role } from '@/types/auth'
 
 interface AuthState {
   token: string | null
   tenantToken: string | null
-  user: User | null
-  setAuth: (token: string, user: User) => void
-  setTenantToken: (token: string) => void
+  accountType: 'platform' | 'tenant' | null
+  user: PlatformUser | null
+  tenantUser: TenantUser | null
+  role: Role | null
+  permissions: string[]
+  setAuth: (token: string, user: PlatformUser) => void
+  setTenantAuth: (tenantToken: string, tenantUser: TenantUser) => void
+  setMe: (role: Role, permissions: string[]) => void
   logout: () => void
 }
 
@@ -16,19 +21,34 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       token: null,
       tenantToken: null,
+      accountType: null,
       user: null,
+      tenantUser: null,
+      role: null,
+      permissions: [],
       setAuth: (token, user) => {
         localStorage.setItem('token', token)
-        set({ token, user })
+        set({ token, user, accountType: 'platform' })
       },
-      setTenantToken: (tenantToken) => {
+      setTenantAuth: (tenantToken, tenantUser) => {
         localStorage.setItem('tenant_token', tenantToken)
-        set({ tenantToken })
+        set({ tenantToken, tenantUser, accountType: 'tenant' })
+      },
+      setMe: (role, permissions) => {
+        set({ role, permissions })
       },
       logout: () => {
         localStorage.removeItem('token')
         localStorage.removeItem('tenant_token')
-        set({ token: null, tenantToken: null, user: null })
+        set({
+          token: null,
+          tenantToken: null,
+          accountType: null,
+          user: null,
+          tenantUser: null,
+          role: null,
+          permissions: [],
+        })
       },
     }),
     { name: 'auth-storage' }

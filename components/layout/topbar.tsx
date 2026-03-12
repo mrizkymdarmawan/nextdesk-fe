@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { LogOut, User } from 'lucide-react'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { ThemeToggle } from '@/components/theme-toggle'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,6 +39,9 @@ export function Topbar({ leftSlot }: TopbarProps) {
   return (
     <header className="flex h-16 items-center justify-between border-b bg-background px-4 sm:px-6">
       <div>{leftSlot}</div>
+
+      <div className="flex items-center gap-1">
+        <ThemeToggle />
 
       <DropdownMenu>
         <DropdownMenuTrigger className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm hover:bg-accent transition-colors outline-none">
@@ -75,6 +79,7 @@ export function Topbar({ leftSlot }: TopbarProps) {
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
+      </div>
     </header>
   )
 }

@@ -93,3 +93,88 @@ export interface ProjectPayload {
   address?: string
   photo_url?: string
 }
+
+// Platform user (from GET /api/v1/users list — Go PascalCase)
+export interface PlatformUserRecord {
+  ID: number
+  Email: string
+  IsActive: boolean
+  CreatedAt: string
+  UpdatedAt: string
+  Role: {
+    ID: number
+    Name: string
+    Slug: string
+  } | null
+}
+
+// Role (from GET /api/v1/roles)
+export interface RoleRecord {
+  ID: number
+  Name: string
+  Slug: string
+  Description: string | null
+  CreatedAt: string
+  UpdatedAt: string
+}
+
+// Permission (from GET /api/v1/permissions)
+export interface PermissionRecord {
+  ID: number
+  Name: string
+  Slug: string
+  GroupName: string
+  Description: string | null
+  CreatedAt: string
+  UpdatedAt: string
+}
+
+// Payment Method (from GET /api/v1/users/:id/payment-methods)
+export interface PaymentMethod {
+  ID: number
+  UserID: number | null
+  MidtransToken: string | null
+  CardLastFour: string | null
+  CardType: string | null
+  IsDefault: boolean
+  CreatedAt: string
+  UpdatedAt: string
+}
+
+// Tenant (from GET /api/v1/tenants)
+export interface TenantRecord {
+  ID: number
+  Name: string
+  SchemaName: string
+  IsActive: boolean
+  CreatedAt: string
+  UpdatedAt: string
+}
+
+// Payloads
+export interface CreateUserPayload {
+  email: string
+  password: string
+  role_id: number
+  is_active: boolean
+  full_name?: string
+}
+
+export interface UpdateUserPayload {
+  email: string
+  role_id: number
+  is_active: boolean
+}
+
+export interface RolePayload {
+  name: string
+  slug: string
+  description?: string
+}
+
+export interface PermissionPayload {
+  name: string
+  slug: string
+  group_name: string
+  description?: string
+}
